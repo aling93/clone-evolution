@@ -1,4 +1,4 @@
-package com.github.clones;
+package com.github.clones.main;
 
 public class Main {
 
