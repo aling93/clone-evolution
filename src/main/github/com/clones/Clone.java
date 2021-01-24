@@ -17,23 +17,32 @@ public class Clone {
         this.cloneType = determineCloneType(duplications);
     }
 
-    public Set<String> getSourceFiles() {
-        var sourceFiles = new HashSet<String>();
-        sourceFiles.add(referenceFile);
+    @Override
+    public String toString() {
+        StringBuilder cloneInfo = new StringBuilder("-------------------------------------\n" +
+                "Clone " + referenceFile + " - " + cloneType +
+                "\nSource files:\n");
+
+        for (var sourceFile : getSourceFiles()) {
+            cloneInfo.append(sourceFile.toString()).append("\n");
+        }
+
+        cloneInfo.append("-------------------------------------\n");
+        return cloneInfo.toString();
+    }
+
+    public Set<CloneSourceFile> getSourceFiles() {
+        var sourceFiles = new HashSet<CloneSourceFile>();
 
         for (var duplication : duplications) {
-            // TODO: not sure about this...
-            var referenceFile = duplication.getReferenceCode().getEntityName();
-            var duplicatedFile = duplication.getDuplicateCode().getEntityName();
+            var referenceFragment = duplication.getReferenceCode();
+            var refSourceFile = new CloneSourceFile(duplication.getReferenceCode().getEntityName(), referenceFragment);
 
-            // TODO: contains can be replaced with add but let me first debug it
-            //noinspection RedundantCollectionOperation
-            if (!sourceFiles.contains(referenceFile))
-                sourceFiles.add(referenceFile);
+            if (!sourceFiles.contains(refSourceFile))
+                sourceFiles.add(refSourceFile);
 
-            //noinspection RedundantCollectionOperation
-            if (!sourceFiles.contains(duplicatedFile))
-                sourceFiles.add(duplicatedFile);
+            sourceFiles.add(new CloneSourceFile(duplication.getDuplicateCode().getEntityName(),
+                    duplication.getDuplicateCode()));
         }
 
         return sourceFiles;

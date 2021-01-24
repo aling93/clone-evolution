@@ -31,30 +31,42 @@ public class CloneExtractor {
 
         for (var duplicate : duplications) {
             var referenceCode = duplicate.getReferenceCode();
-            var duplicatedCode = duplicate.getDuplicateCode();
-
             var referenceFile = referenceCode.getEntityName();
-            var duplicatedFile = duplicatedCode.getEntityName();
 
             var duplicationList = resultsMap.get(referenceFile);
-            if (duplicationList == null)
+            if (duplicationList == null) {
+                if (isAlreadyDuplicated(duplicate, resultsMap))
+                    continue;
                 duplicationList = new ArrayList<>();
+            }
+
             duplicationList.add(duplicate);
-
             resultsMap.put(referenceFile, duplicationList);
-
-            if (duplicate.isSelfDuplication())
-                continue;
-
-            // TODO: not really sure what this does...
-            var secondaryFileDuplications = resultsMap.get(duplicatedFile);
-            if (secondaryFileDuplications == null)
-                secondaryFileDuplications = new ArrayList<>();
-
-            secondaryFileDuplications.add(duplicate);
-            resultsMap.put(duplicatedFile, secondaryFileDuplications);
         }
 
         return resultsMap;
+    }
+
+    private boolean isAlreadyDuplicated(Duplication duplicate, HashMap<String, List<Duplication>> resultsMap) {
+        var refCodeFound = false;
+        var dupCodeFound = false;
+
+        for (var file : resultsMap.keySet()) {
+            var duplications = resultsMap.get(file);
+            for (var duplication : duplications) {
+                var refComparer = new CodeFragmentComparer(duplication.getDuplicateCode(), duplicate.getReferenceCode());
+                if (refComparer.areEqual())
+                    refCodeFound = true;
+
+                var dupComparer =  new CodeFragmentComparer(duplication.getDuplicateCode(), duplicate.getDuplicateCode());
+                if (dupComparer.areEqual())
+                    dupCodeFound = true;
+
+                if (refCodeFound && dupCodeFound)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

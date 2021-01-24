@@ -8,7 +8,6 @@ public class Main {
         var dudeParameters = getDudeParameters();
         var dudeRunner = new DudeRunner(dudeParameters);
         var results = dudeRunner.run();
-        System.out.format("Got %d duplications\n", results.length);
 
         var cloneExtractor = new CloneExtractor();
         var clones = cloneExtractor.extract(results);
@@ -17,14 +16,7 @@ public class Main {
             System.out.println("No clones found");
         else {
             for (var clone : clones) {
-                // TODO: add toString() to Clone.cs
-                System.out.println("Clone: " + clone.getReferenceFile());
-                System.out.println("Clone type: " + clone.getCloneType());
-
-                for (var sourceFile : clone.getSourceFiles()) {
-                    System.out.println("File: " + sourceFile);
-                }
-                System.out.println("-------------------------------------\n\n");
+                System.out.println(clone);
             }
         }
     }
