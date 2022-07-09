@@ -7,6 +7,7 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 sourceSets {
@@ -19,8 +20,12 @@ sourceSets {
 
 dependencies {
     implementation files('libs/dude.jar')
+    implementation fileTree(dir: 'libs/chronolens', include: ['*.jar'])
     implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    //implementation "com.github.andreihh.chronolens:chronolens-core:0.2.10"
+    //testImplementation "com.github.andreihh.chronolens:chronolens-test:0.2.10"
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 }

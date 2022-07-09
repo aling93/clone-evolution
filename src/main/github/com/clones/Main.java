@@ -4,7 +4,12 @@ public class Main {
     private static final String projectToAnalyze = "C:\\Repos\\clone-evolution\\src\\main\\github\\com\\clones\\tests\\playground";
 
     public static void main(String[] args) {
+        var repoDir = "C:\\Repos\\clone-evolution-tests\\junit4";
+        var chronoLensWrapper = new ChronoLensWrapper("", repoDir);
+        chronoLensWrapper.DoSomething();
+    }
 
+    private static void RunDuDe() {
         var dudeParameters = getDudeParameters();
         var dudeRunner = new DudeRunner(dudeParameters);
         var results = dudeRunner.run();
